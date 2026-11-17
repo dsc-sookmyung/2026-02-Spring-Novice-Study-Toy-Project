@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>스터디 상세 | GDGoC 스터디</title>
+    <link rel="stylesheet" th:href="@{/css/study.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<main class="">
+    <a class="link" th:href="@{/studies}">‹ 스터디 목록으로</a>
+    <h1>스터디 상세</h1>
+    <div class="detail">
+        <section class="panel">
+            <h2>스터디 소개</h2>
+            <p>등록된 소개가 없습니다.</p>
+        </section>
+        <aside class="panel count">
+            <div class="toolbar"><strong>모집 상태</strong><span>—</span></div>
+            <strong class="total">—</strong>
+            <span>스터디장 포함</span>
+            <button type="button" class="primary" id="apply-button">참가 신청</button>
+            <button class="bookmark-heart" id="bookmark-button" type="button" aria-label="찜하기" aria-pressed="false">
+                <span class="heart-off" aria-hidden="true">🤍</span>
+                <span class="heart-on" aria-hidden="true">❤️</span>
+            </button>
+        </aside>
+    </div>
+    <div class="actions">
+        <a class="button" th:href="@{/studies/1/edit}">수정</a>
+        <a class="button" th:href="@{/studies/1/applicants}">신청자 관리</a>
+    </div>
+</main>
+<dialog id="apply-dialog" aria-labelledby="apply-title">
+    <h2 id="apply-title">스터디 참가 신청</h2>
+    <p>이 스터디에 참가를 신청하시겠어요?</p>
+    <form method="dialog" class="actions">
+        <button value="cancel">취소</button>
+        <button value="confirm" class="primary">신청하기</button>
+    </form>
+</dialog>
+<script>
+    const applyDialog = document.querySelector('#apply-dialog');
+    document.querySelector('#apply-button').addEventListener('click', () => applyDialog.showModal());
+    const bookmarkButton = document.querySelector('#bookmark-button');
+    bookmarkButton.addEventListener('click', () => {
+        const selected = bookmarkButton.getAttribute('aria-pressed') === 'true';
+        bookmarkButton.setAttribute('aria-pressed', String(!selected));
+    });
+</script>
+</body>
+</html>

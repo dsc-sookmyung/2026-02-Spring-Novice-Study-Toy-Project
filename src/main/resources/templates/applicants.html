@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>신청자 관리 | GDGoC 스터디</title>
+    <link rel="stylesheet" th:href="@{/css/study.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<main class="">
+    <a class="link" th:href="@{/studies/1}">‹ 스터디 상세</a>
+    <h1>신청자 관리</h1>
+    <div class="tabs"><button type="button" class="primary" aria-pressed="true">전체</button> <button type="button" aria-pressed="false">대기</button> <button type="button" aria-pressed="false">승인</button> <button type="button" aria-pressed="false">거절</button> <button type="button" aria-pressed="false">최종 참여자</button></div>
+    <div class="table-wrap"><table><thead><tr><th scope="col">번호</th><th scope="col">이름</th><th scope="col">신청일</th><th scope="col">상태</th><th scope="col">관리</th></tr></thead><tbody><tr><td colspan="5">신청자가 없습니다.</td></tr></tbody></table></div>
+</main>
+<script>
+    const filters = document.querySelectorAll('.tabs button');
+    filters.forEach(filter => filter.addEventListener('click', () => {
+        filters.forEach(button => {
+            const selected = button === filter;
+            button.classList.toggle('primary', selected);
+            button.setAttribute('aria-pressed', selected);
+        });
+    }));
+</script>
+</body>
+</html>

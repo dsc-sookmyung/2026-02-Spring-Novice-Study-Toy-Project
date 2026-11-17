@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>로그인 | GDGoC 스터디</title>
+    <link rel="stylesheet" th:href="@{/css/study.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<main class="login">
+    <section class="panel login-card">
+        <h1>GDGoC 스터디</h1>
+        <p>Google 계정으로 로그인하여<br>스터디에 참여하세요.</p>
+        <p th:if="${param.error}" role="alert">로그인에 실패했습니다. 다시 시도해 주세요.</p>
+        <a class="google-sign-in" th:if="${googleEnabled}" th:href="@{/oauth2/authorization/google}">
+            <img th:src="@{/img/google.png}" alt="Google로 로그인">
+        </a>
+        <p th:unless="${googleEnabled}" role="status">Google 로그인 설정이 필요합니다.</p>
+    </section>
+</main>
+</body>
+</html>

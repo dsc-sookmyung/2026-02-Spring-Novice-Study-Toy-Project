@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>마이페이지 | GDGoC 스터디</title>
+    <link rel="stylesheet" th:href="@{/css/study.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<main class="">
+    <h1>마이페이지</h1>
+    <section>
+        <h2>내 신청 내역</h2>
+        <div class="table-wrap"><table><thead><tr><th scope="col">스터디</th><th scope="col">신청일</th><th scope="col">상태</th><th scope="col">관리</th></tr></thead><tbody><tr><td colspan="4">신청 내역이 없습니다.</td></tr></tbody></table></div>
+    </section>
+    <section>
+        <h2>내가 개설한 스터디</h2>
+        <div class="table-wrap"><table><thead><tr><th scope="col">스터디</th><th scope="col">모집 상태</th><th scope="col">현재 인원</th></tr></thead><tbody><tr><td colspan="3">개설한 스터디가 없습니다.</td></tr></tbody></table></div>
+    </section>
+</main>
+</body>
+</html>

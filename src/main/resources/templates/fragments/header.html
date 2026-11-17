@@ -1,0 +1,11 @@
+<header th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+    <nav aria-label="주 메뉴">
+        <a class="brand" th:href="@{/studies}">GDGoC 스터디</a>
+        <a th:href="@{/studies}">스터디 목록</a>
+        <a th:href="@{/mypage}">마이페이지</a>
+        <a th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/login}">로그인</a>
+        <form th:if="${#authorization.expression('isAuthenticated()')}" method="post" th:action="@{/logout}">
+            <button type="submit">로그아웃</button>
+        </form>
+    </nav>
+</header>
