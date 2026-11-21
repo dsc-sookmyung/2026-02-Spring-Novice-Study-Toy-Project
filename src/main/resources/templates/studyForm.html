@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>스터디 등록·수정 | GDGoC 스터디</title>
     <link rel="stylesheet" th:href="@{/css/study.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -17,7 +19,7 @@
             <label for="description">스터디 소개</label>
             <textarea id="description" name="description" rows="5" placeholder="스터디에 대한 간단한 소개를 입력하세요." required></textarea>
             <label for="capacity">모집 정원</label>
-            <input id="capacity" name="capacity" type="number" min="1" required>
+            <input id="capacity" name="capacity" type="number" min="2" required>
         </div>
         <div class="actions">
             <a class="button" th:href="@{/studies}">취소</a>
@@ -28,8 +30,40 @@
 <script>
     document.querySelector('#study-form').addEventListener('submit', event => {
         event.preventDefault();
-        window.location.assign(event.currentTarget.action);
+
+        const body = JSON.stringify({
+            title: document.getElementById('title').value,
+            description: document.getElementById('description').value,
+            capacity: Number(document.getElementById('capacity').value),
+        });
+
+        function success() {
+            alert('등록 완료되었습니다.');
+            location.replace('/studies');
+        }
+
+        function fail() {
+            alert('등록 실패했습니다.');
+            location.replace('/studies');
+        }
+        httpRequest("POST", "/api/studies", body, success, fail);
     });
+
+    function httpRequest(method, url, body, success, fail) {
+        const token = document.querySelector('meta[name="_csrf"]').content;
+        const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+        fetch(url, {
+            method: method,
+            headers: { [header]: token, "Content-Type": "application/json" },
+            body: body,
+        }).then((response) => {
+            if (response.ok) {
+                return success();
+            }
+            return fail();
+        });
+    }
 </script>
 </body>
 </html>

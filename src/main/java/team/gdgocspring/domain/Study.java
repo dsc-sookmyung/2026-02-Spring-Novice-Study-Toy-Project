@@ -1,6 +1,10 @@
 package team.gdgocspring.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -8,8 +12,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Table(name = "study")
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Study {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +45,7 @@ public class Study {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    protected Study() {
-    }
-
+    @Builder
     public Study(String leaderId, String title, String description, int capacity) {
         this.leaderId = leaderId;
         this.title = title;
@@ -50,25 +54,4 @@ public class Study {
         this.close = false;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getLeaderId() {
-        return leaderId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() { return description; }
-
-    public int getCapacity() { return capacity; }
-
-    public boolean getClose() { return close; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
