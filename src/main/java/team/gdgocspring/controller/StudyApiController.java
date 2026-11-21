@@ -3,9 +3,7 @@ package team.gdgocspring.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.gdgocspring.domain.Study;
 import team.gdgocspring.dto.AddStudyRequest;
 import team.gdgocspring.service.StudyService;
@@ -24,5 +22,12 @@ public class StudyApiController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedStudy);
+    }
+
+    @DeleteMapping("/api/studies/{id}")
+    public ResponseEntity<Void> deleteStudy(@PathVariable("id") long id,
+                                            Principal principal) {
+        studyService.delete(id, principal.getName());
+        return ResponseEntity.noContent().build();
     }
 }
