@@ -5,17 +5,29 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import team.gdgocspring.dto.StudyListViewResponse;
+import team.gdgocspring.dto.StudyResponse;
+import team.gdgocspring.service.StudyService;
+
+import java.util.List;
 
 @Controller
 public class StudyViewController {
     private final ObjectProvider<ClientRegistrationRepository> registrations;
+    private final StudyService studyService;
 
-    public StudyViewController(ObjectProvider<ClientRegistrationRepository> registrations) {
+    public StudyViewController(ObjectProvider<ClientRegistrationRepository> registrations, StudyService studyService) {
         this.registrations = registrations;
+        this.studyService = studyService;;
     }
 
     @GetMapping({"/", "/studies"})
-    public String list() {
+    public String getStudies(Model model) {
+        List<StudyListViewResponse> studies = studyService.findAll().stream()
+                .map(StudyListViewResponse::new)
+                .toList();
+        model.addAttribute("studies", studies);
+
         return "studyList";
     }
 
