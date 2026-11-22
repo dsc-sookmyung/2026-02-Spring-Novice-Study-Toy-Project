@@ -20,7 +20,12 @@
         </select>
         <button type="submit">검색</button>
     </form>
-    <p class="panel">등록된 스터디가 없습니다.</p>
+    <div th:each="study : ${studies}">
+        <a th:href="@{/studies/{id}(id=${study.studyId})}">
+            <h2 th:text="${study.title}">스터디 제목</h2>
+        </a>
+    </div>
+    <p class="panel" th:if="${#lists.isEmpty(studies)}">등록된 스터디가 없습니다.</p>
 </main>
 </body>
 </html>

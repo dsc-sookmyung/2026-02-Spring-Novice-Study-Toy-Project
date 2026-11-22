@@ -10,7 +10,7 @@
 <header th:replace="~{fragments/header :: header}"></header>
 <main class="">
     <div class="toolbar"><h1 th:text="${editing ? '스터디 수정' : '스터디 개설'}">스터디 개설</h1></div>
-    <form aria-label="스터디 등록·수정" id="study-form" th:action="@{/studies}">
+    <form aria-label="스터디 등록·수정" id="study-form" th:action="@{/studies}" method="post">
         <div class="panel fields">
             <label for="title">제목</label>
             <input id="title" name="title" placeholder="스터디 제목을 입력하세요." required>
@@ -25,11 +25,5 @@
         </div>
     </form>
 </main>
-<script>
-    document.querySelector('#study-form').addEventListener('submit', event => {
-        event.preventDefault();
-        window.location.assign(event.currentTarget.action);
-    });
-</script>
 </body>
 </html>

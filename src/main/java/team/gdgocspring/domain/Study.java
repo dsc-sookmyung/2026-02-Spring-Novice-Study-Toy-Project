@@ -27,7 +27,9 @@ public class Study {
     public User getOwner() {
         return owner;
     }
-
+    public Integer getStudyId() {
+        return studyId;
+    }
     public String getTitle() {
         return title;
     }
@@ -40,6 +42,10 @@ public class Study {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
     }
 
     protected Study() {
