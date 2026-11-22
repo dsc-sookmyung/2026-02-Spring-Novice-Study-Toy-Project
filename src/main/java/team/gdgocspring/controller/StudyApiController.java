@@ -3,10 +3,7 @@ package team.gdgocspring.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.gdgocspring.domain.Study;
 import team.gdgocspring.dto.AddStudyRequest;
 import team.gdgocspring.dto.StudyResponse;
@@ -38,5 +35,14 @@ public class StudyApiController {
                 .toList();
         return ResponseEntity.ok()
                 .body(studies);
+    }
+
+    // 스터디 모집글 조회 컨트롤러 메서드
+    @GetMapping("/api/studies/{id}")
+    public ResponseEntity<StudyResponse> findStudy(@PathVariable long id) {
+        Study study = studyService.findById(id);
+
+        return ResponseEntity.ok()
+                .body(new StudyResponse(study));
     }
 }
