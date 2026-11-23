@@ -41,22 +41,26 @@ public class StudyViewController {
     }
 
     @GetMapping("/studies/{id}")
-    public String getStudy(@PathVariable Long id, Model model) {
+    public String getStudy(@PathVariable Long id, Principal principal, Model model) {
         Study study = studyService.findById(id);
         model.addAttribute("study", new StudyViewResponse(study));
+
+        boolean owner = principal != null
+                && study.getLeaderId().equals(principal.getName());
+        model.addAttribute("owner", owner);
 
         return "studyDetail";
     }
 
     @GetMapping("/studies/new")
-    public String create(Model model) {
-        model.addAttribute("editing", false);
-        return "studyForm";
-    }
+    public String create(@RequestParam(name = "id", required = false) Long id, Principal principal, Model model) {
+        model.addAttribute("editing", id != null);
 
-    @GetMapping("/studies/1/edit")
-    public String edit(Model model) {
-        model.addAttribute("editing", true);
+        if (id != null) {
+            Study study = studyService.findForEdit(id, principal.getName());
+            model.addAttribute("study", study);
+        }
+
         return "studyForm";
     }
 
