@@ -20,7 +20,31 @@
         </select>
         <button type="submit">검색</button>
     </form>
-    <p class="panel">등록된 스터디가 없습니다.</p>
+
+    <!-- 스터디가 없을 때 -->
+    <p class="panel" th:if="${#lists.isEmpty(studies)}">
+        등록된 스터디가 없습니다.
+    </p>
+
+    <!-- 스터디가 있을 때 -->
+    <div th:unless="${#lists.isEmpty(studies)}">
+        <div class="panel" th:each="study : ${studies}">
+            <h2 th:text="${study.title}">스터디 제목</h2>
+
+            <p th:text="${study.content}">스터디 소개</p>
+
+            <p>
+                모집 정원:
+                <span th:text="${study.capacity}">0</span>명
+            </p>
+
+            <p>
+                모집 상태:
+                <span th:text="${study.recruitmentStatus}">OPEN</span>
+            </p>
+        </div>
+    </div>
+
 </main>
 </body>
 </html>
