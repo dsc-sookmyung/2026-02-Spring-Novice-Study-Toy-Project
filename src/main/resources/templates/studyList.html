@@ -8,16 +8,26 @@
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
+
 <main class="">
-    <div class="toolbar"><h1>스터디 목록</h1><a class="button primary" th:href="@{/studies/new}">스터디 개설</a></div>
+    <div class="toolbar">
+        <h1>스터디 목록</h1>
+        <a class="button primary" th:href="@{/studies/new}">스터디 개설</a>
+    </div>
+
     <form class="toolbar filters" aria-label="검색" th:action="@{/studies}" method="get">
-        <input type="search" name="keyword" th:value="${param.keyword}" aria-label="스터디 검색" placeholder="스터디 검색">
+        <input type="search" name="keyword" th:value="${param.keyword}"
+               aria-label="스터디 검색" placeholder="스터디 검색">
+
         <label for="status">모집 상태</label>
         <select id="status" name="status">
             <option value="">전체</option>
-            <option value="open" th:selected="${param.status != null and param.status[0] == 'open'}">모집 중</option>
-            <option value="closed" th:selected="${param.status != null and param.status[0] == 'closed'}">모집 마감</option>
+            <option value="open"
+                    th:selected="${param.status != null and param.status[0] == 'open'}">모집 중</option>
+            <option value="closed"
+                    th:selected="${param.status != null and param.status[0] == 'closed'}">모집 마감</option>
         </select>
+
         <button type="submit">검색</button>
     </form>
 
@@ -29,7 +39,10 @@
     <!-- 스터디가 있을 때 -->
     <div th:unless="${#lists.isEmpty(studies)}">
         <div class="panel" th:each="study : ${studies}">
-            <h2 th:text="${study.title}">스터디 제목</h2>
+            <h2>
+                <a th:href="@{/studies/{id}(id=${study.id})}"
+                   th:text="${study.title}">스터디 제목</a>
+            </h2>
 
             <p th:text="${study.content}">스터디 소개</p>
 
@@ -44,7 +57,6 @@
             </p>
         </div>
     </div>
-
 </main>
 </body>
 </html>

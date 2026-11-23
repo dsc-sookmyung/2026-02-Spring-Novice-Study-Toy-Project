@@ -11,20 +11,21 @@
 
 <main class="">
     <a class="link" th:href="@{/studies}">‹ 스터디 목록으로</a>
-    <h1>스터디 상세</h1>
+    <h1 th:text="${study.title}">스터디 상세</h1>
 
     <div class="detail">
         <section class="panel">
             <h2>스터디 소개</h2>
-            <p>등록된 소개가 없습니다.</p>
+            <p th:text="${study.content}">스터디 소개 내용</p>
         </section>
 
         <aside class="panel count">
             <div class="toolbar">
                 <strong>모집 상태</strong>
-                <span>—</span>
+                <span th:text="${study.recruitmentStatus}">OPEN</span>
             </div>
-            <strong class="total">—</strong>
+
+            <strong class="total" th:text="${study.capacity}">0</strong>
             <span>스터디장 포함</span>
 
             <button type="button" class="primary" id="apply-button">
@@ -50,7 +51,8 @@
         </a>
 
         <!-- 신청자 관리 -->
-        <a class="button" th:href="@{/studies/1/applicants}">
+        <a class="button"
+           th:href="@{/studies/{id}/applicants(id=${study.id})}">
             신청자 관리
         </a>
 
