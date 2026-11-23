@@ -19,7 +19,9 @@
           id="study-form"
           method="post"
           th:action="${editing} ? @{/studies/{id}/edit(id=${study.id})} : @{/studies}">
-
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
         <div class="panel fields">
             <label for="title">제목</label>
             <input id="title" name="title"
