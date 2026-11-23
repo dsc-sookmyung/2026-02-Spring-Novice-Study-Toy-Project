@@ -13,17 +13,14 @@ if (deleteButton) {
                 headers: { [csrfHeader]: csrfToken }
             });
 
-            if (response.status === 204) {
-                window.location.replace(deleteButton.dataset.listUrl);
-            } else if (response.status === 404) {
-                window.alert('스터디를 찾을 수 없습니다.');
-            } else if (response.status === 403) {
-                window.alert('삭제 권한이 없거나 요청을 확인할 수 없습니다.');
-            } else {
-                window.alert('스터디를 삭제하지 못했습니다.');
+            if (response.status !== 204) {
+                alert(`삭제에 실패했습니다. (HTTP ${response.status})`);
+                return;
             }
+            alert('삭제가 완료되었습니다.');
+            location.replace(deleteButton.dataset.listUrl);
         } catch {
-            window.alert('서버에 연결하지 못했습니다.');
+            alert('서버에 연결하지 못했습니다.');
         } finally {
             deleteButton.disabled = false;
         }
