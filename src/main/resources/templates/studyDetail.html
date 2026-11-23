@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>스터디 상세 | GDGoC 스터디</title>
     <link rel="stylesheet" th:href="@{/css/study.css}">
 </head>
@@ -28,7 +30,16 @@
         </aside>
     </div>
     <div class="actions">
-        <a class="button" th:href="@{/studies/1/edit}">수정</a>
+        <th:block th:if="${owner}">
+            <a class="button" th:href="@{/studies/new(id=${study.id})}">수정</a>
+
+            <button type="button" class="button" id="delete-btn"
+                    th:data-delete-url="@{/api/studies/{id}(id=${study.id})}"
+                    th:data-list-url="@{/studies}">
+                삭제
+            </button>
+        </th:block>
+
         <a class="button" th:href="@{/studies/1/applicants}">신청자 관리</a>
     </div>
 </main>
@@ -49,5 +60,6 @@
         bookmarkButton.setAttribute('aria-pressed', String(!selected));
     });
 </script>
+<script th:src="@{/js/studyDetail.js}"></script>
 </body>
 </html>
