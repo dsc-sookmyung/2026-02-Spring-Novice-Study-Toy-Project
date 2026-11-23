@@ -15,12 +15,12 @@
     <h1>스터디 상세</h1>
     <div class="detail">
         <section class="panel">
-            <h2>스터디 소개</h2>
-            <p>등록된 소개가 없습니다.</p>
+            <h2 th:text="${study.title}">스터디 소개</h2>
+            <p th:text="${study.description}">등록된 소개가 없습니다.</p>
         </section>
         <aside class="panel count">
-            <div class="toolbar"><strong>모집 상태</strong><span>—</span></div>
-            <strong class="total">—</strong>
+            <div class="toolbar"><strong>모집 상태</strong><span class="badge" th:classappend="${study.close} ? 'closed' : 'approved'" th:text="${study.close} ? '모집 마감' : '모집 중'"></span></div>
+            <strong class="total" th:text="${study.currentCount} + ' / ' + ${study.capacity} + '명'"></strong>
             <span>스터디장 포함</span>
             <button type="button" class="primary" id="apply-button">참가 신청</button>
             <button class="bookmark-heart" id="bookmark-button" type="button" aria-label="찜하기" aria-pressed="false">
