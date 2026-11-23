@@ -21,4 +21,9 @@ public class UserService {
         user.updateProfile(account.getEmail(), account.getFullName());
         users.save(user);
     }
+
+    public User getUser(String googleSubject) {
+        return users.findById(googleSubject)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+    }
 }
