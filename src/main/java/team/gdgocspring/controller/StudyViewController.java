@@ -1,26 +1,44 @@
 package team.gdgocspring.controller;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import team.gdgocspring.domain.Study;
+import team.gdgocspring.domain.User;
+import team.gdgocspring.service.StudyService;
+import team.gdgocspring.service.UserService;
+
+import java.util.List;
 
 @Controller
 public class StudyViewController {
     private final ObjectProvider<ClientRegistrationRepository> registrations;
-
-    public StudyViewController(ObjectProvider<ClientRegistrationRepository> registrations) {
+    private final StudyService studyService;
+    private final UserService userService;
+    public StudyViewController(ObjectProvider<ClientRegistrationRepository> registrations, StudyService studyService, UserService userService) {
         this.registrations = registrations;
+        this.studyService = studyService;
+        this.userService = userService;
     }
 
     @GetMapping({"/", "/studies"})
-    public String list() {
+    public String list(Model model) {
+        List<Study> studyList = studyService.getAllStudies();
+        model.addAttribute("studies", studyList);
         return "studyList";
     }
 
-    @GetMapping("/studies/1")
-    public String detail() {
+    @GetMapping("/studies/{id}")
+    public String detail(@PathVariable Integer id, Model model) {
+        Study study = studyService.getStudy(id);
+        model.addAttribute("study", study);
         return "studyDetail";
     }
 
@@ -50,5 +68,17 @@ public class StudyViewController {
     public String login(Model model) {
         model.addAttribute("googleEnabled", registrations.getIfAvailable() != null);
         return "login";
+    }
+
+    @PostMapping("/studies")
+    public String registerStudy(
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam int capacity,
+            @AuthenticationPrincipal OidcUser account
+    ) {
+        User owner = userService.getUser(account.getSubject());
+        Study savedStudy = studyService.createStudy(title, description, capacity, owner);
+        return "redirect:/studies/" + savedStudy.getStudyId();
     }
 }
