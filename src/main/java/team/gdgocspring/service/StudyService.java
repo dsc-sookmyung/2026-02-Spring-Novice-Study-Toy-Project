@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class StudyService {
 
@@ -25,5 +27,9 @@ public class StudyService {
         Study study = request.toEntity(leaderId);
 
         return studyRepository.save(study);
+    }
+
+    public List<Study> findAll() {
+        return studyRepository.findAll();
     }
 }
