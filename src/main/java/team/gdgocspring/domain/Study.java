@@ -12,34 +12,33 @@ public class Study {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
-    private Integer capacity;
+    private int capacity;
 
-    @Column(name = "recruitment_status", nullable = false, length = 20)
+    @Column(name = "recruitment_status", length = 20)
     private String recruitmentStatus;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "leader_id", nullable = false)
+    // 스터디 개설자와 User 엔티티 연결
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "leader_id", referencedColumnName = "google_subject")
     private User leader;
 
     protected Study() {
     }
 
-    // 스터디 등록용 생성자
+    // 스터디 등록 시 사용하는 생성자
     @Builder
-    public Study(String title, String content, Integer capacity, User leader) {
+    public Study(String title, String content, int capacity, User leader) {
         this.title = title;
         this.content = content;
         this.capacity = capacity;
@@ -59,7 +58,7 @@ public class Study {
         return content;
     }
 
-    public Integer getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
@@ -79,18 +78,24 @@ public class Study {
         return leader;
     }
 
-    // 스터디 수정
+    // 스터디 정보 수정
     public void update(String title, String content, Integer capacity,
                        String recruitmentStatus) {
         this.title = title;
         this.content = content;
         this.capacity = capacity;
         this.recruitmentStatus = recruitmentStatus;
-        this.updatedAt = LocalDateTime.now();
     }
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

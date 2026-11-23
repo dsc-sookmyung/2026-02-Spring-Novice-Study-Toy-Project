@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(length = 255)
+    @Column(name = "google_subject", length = 255)
     private String googleSubject;
     private String email;
     private String name;
