@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import team.gdgocspring.domain.Study;
 import team.gdgocspring.domain.User;
 import team.gdgocspring.dto.AddStudyRequest;
+import team.gdgocspring.dto.UpdateStudyRequest;
 import team.gdgocspring.repository.StudyRepository;
 import team.gdgocspring.repository.UserRepository;
 
@@ -48,5 +49,55 @@ public class StudyService {
         }
 
         studyRepository.delete(study);
+    }
+
+    @Transactional
+    public Study update(long id, UpdateStudyRequest request, String googleSubject) {
+        Study study = studyRepository.findById(id)
+                .orElseThrow(() -> new
+                        ResponseStatusException(HttpStatus.NOT_FOUND, "스터디를 찾을 수 없습니다. "));
+
+        if (!study.getLeaderId().equals(googleSubject)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "스터디 개설자만 수정할 수 있습니다.");
+        }
+
+        String title = request.getTitle();
+        String description = request.getDescription();
+        Integer capacity = request.getCapacity();
+
+        if (title == null || title.isBlank() || description == null || description.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "제목과 스터디 소개를 입력해 주세요.");
+        }
+
+        if (capacity == null || capacity < 2) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "모집 정원은 스터디장을 포함해 2명 이상이어야 합니다.");
+        }
+
+        study.update(title, description, capacity);
+        return study;
+    }
+
+    @Transactional(readOnly = true)
+    public Study findForEdit(long id, String googleSubject) {
+        Study study = studyRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "스터디를 찾을 수 없습니다."));
+
+        if (!study.getLeaderId().equals(googleSubject)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "스터디 개설자만 수정할 수 있습니다.");
+        }
+
+        return study;
+    }
+
+    @Transactional(readOnly = true)
+    public Study findById(long id) {
+        return studyRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "스터디를 찾을 수 없습니다."));
     }
 }

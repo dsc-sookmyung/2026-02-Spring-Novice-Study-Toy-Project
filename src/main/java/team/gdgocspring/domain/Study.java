@@ -54,4 +54,10 @@ public class Study {
         this.close = false;
     }
 
+    public void update(String title, String description, int capacity) {
+        this.title = title;
+        this.description = description;
+        this.capacity = capacity;
+    }
+
 }

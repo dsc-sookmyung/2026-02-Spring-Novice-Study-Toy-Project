@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.gdgocspring.domain.Study;
 import team.gdgocspring.dto.AddStudyRequest;
+import team.gdgocspring.dto.UpdateStudyRequest;
 import team.gdgocspring.service.StudyService;
 
 import java.security.Principal;
@@ -29,5 +30,13 @@ public class StudyApiController {
                                             Principal principal) {
         studyService.delete(id, principal.getName());
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/api/studies/{id}")
+    public ResponseEntity<Study> updateStudy(@PathVariable("id") long id, @RequestBody UpdateStudyRequest request, Principal principal) {
+        Study updatedStudy = studyService.update(id, request, principal.getName());
+
+        return ResponseEntity.ok()
+                .body(updatedStudy);
     }
 }
