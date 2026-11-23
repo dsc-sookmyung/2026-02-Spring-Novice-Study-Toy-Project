@@ -3,6 +3,7 @@ package team.gdgocspring.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.gdgocspring.domain.Study;
+import team.gdgocspring.domain.User;
 
 @NoArgsConstructor
 @Getter
@@ -13,7 +14,7 @@ public class StudyResponse {
     private String content;
     private int capacity;
     private String recruitment_status;
-    private String leader_id;
+    private User leader;
 
     public StudyResponse(Study study) {
         this.studyid = study.getId();
@@ -21,6 +22,6 @@ public class StudyResponse {
         this.content = study.getContent();
         this.capacity = study.getCapacity();
         this.recruitment_status = study.getRecruitmentStatus();
-        this.leader_id = study.getLeader_id();
+        this.leader = study.getLeader();
     }
 }

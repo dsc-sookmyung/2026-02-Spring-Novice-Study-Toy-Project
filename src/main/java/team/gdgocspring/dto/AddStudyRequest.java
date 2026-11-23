@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.gdgocspring.domain.Study;
+import team.gdgocspring.domain.User;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,12 +15,12 @@ public class AddStudyRequest {
     private String content;
     private int capacity;
 
-    public Study toEntity(String leaderId) {
+    public Study toEntity(User leader) {
         return Study.builder()
                 .title(title)
                 .content(content)
                 .capacity(capacity)
-                .leader_id(leaderId)
+                .leader(leader)
                 .build();
     }
 }
