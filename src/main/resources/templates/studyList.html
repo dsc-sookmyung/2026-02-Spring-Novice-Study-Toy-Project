@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>스터디 목록 | GDGoC 스터디</title>
     <link rel="stylesheet" th:href="@{/css/study.css}">
+    <style>
+        .study-card a:hover {
+            text-decoration: none;
+        }
+        .study-card a:hover h2,
+        .study-card a:hover p {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -20,7 +29,25 @@
         </select>
         <button type="submit">검색</button>
     </form>
-    <p class="panel">등록된 스터디가 없습니다.</p>
+    <p class="panel" th:if="${#lists.isEmpty(studies)}">등록된 스터디가 없습니다.</p>
+
+    <div class="study-list" th:unless="${#lists.isEmpty(studies)}">
+        <div class="panel study-card" th:each="item : ${studies}">
+            <a th:href="@{/studies/{id}(id=${item.id})}">
+                <div class="toolbar">
+                    <h2 th:text="${item.title}"></h2>
+                    <span class="badge"
+                          th:classappend="${item.close} ? 'closed' : 'approved'"
+                          th:text="${item.close} ? '모집 마감' : '모집 중'"></span>
+                </div>
+                <div class="toolbar">
+                    <p th:text="${item.description}"></p>
+                    <strong class="count" th:text="${item.currentCount} + ' / ' + ${item.capacity} + '명'"></strong>
+                </div>
+            </a>
+        </div>
+    </div>
+        <br>
 </main>
 </body>
 </html>
