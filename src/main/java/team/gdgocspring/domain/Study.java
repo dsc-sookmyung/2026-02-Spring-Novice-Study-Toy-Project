@@ -2,7 +2,7 @@ package team.gdgocspring.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "studies")
@@ -12,31 +12,38 @@ public class Study {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    private int capacity;
+    @Column(nullable = false)
+    private Integer capacity;
 
-    @Column(name = "recruitment_status")
+    @Column(name = "recruitment_status", nullable = false, length = 20)
     private String recruitmentStatus;
 
-    private Date created_at;
-    private Date updated_at;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    private String leader_id;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "leader_id", nullable = false)
+    private User leader;
 
     protected Study() {
     }
 
+    // 스터디 등록용 생성자
     @Builder
-    public Study(String title, String content, int capacity,
-                 String leader_id) {
+    public Study(String title, String content, Integer capacity, User leader) {
         this.title = title;
         this.content = content;
         this.capacity = capacity;
-        this.leader_id = leader_id;
+        this.leader = leader;
         this.recruitmentStatus = "OPEN";
     }
 
@@ -52,7 +59,7 @@ public class Study {
         return content;
     }
 
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 
@@ -60,21 +67,30 @@ public class Study {
         return recruitmentStatus;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public Date getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public String getLeader_id() {
-        return leader_id;
+    public User getLeader() {
+        return leader;
+    }
+
+    // 스터디 수정
+    public void update(String title, String content, Integer capacity,
+                       String recruitmentStatus) {
+        this.title = title;
+        this.content = content;
+        this.capacity = capacity;
+        this.recruitmentStatus = recruitmentStatus;
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PrePersist
     protected void onCreate() {
-        this.created_at = new Date();
-        this.updated_at = new Date();
+        this.createdAt = LocalDateTime.now();
     }
 }

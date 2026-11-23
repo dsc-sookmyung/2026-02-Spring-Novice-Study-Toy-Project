@@ -30,12 +30,6 @@ public class StudyViewController {
         return "studyForm";
     }
 
-    @GetMapping("/studies/1/edit")
-    public String edit(Model model) {
-        model.addAttribute("editing", true);
-        return "studyForm";
-    }
-
     @GetMapping("/studies/1/applicants")
     public String applicants() {
         return "applicants";
