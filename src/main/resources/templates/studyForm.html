@@ -10,17 +10,20 @@
 <header th:replace="~{fragments/header :: header}"></header>
 <main class="">
     <div class="toolbar"><h1 th:text="${editing ? '스터디 수정' : '스터디 개설'}">스터디 개설</h1></div>
-    <form aria-label="스터디 등록·수정" id="study-form" th:action="@{/studies}" method="post">
+    <form aria-label="스터디 등록·수정" id="study-form"
+          th:action="${editing} ? @{/studies/{studyId}/edit(studyId=${study.studyId})} : @{/studies}"
+          method="post">
+
         <div class="panel fields">
             <label for="title">제목</label>
-            <input id="title" name="title" placeholder="스터디 제목을 입력하세요." required>
+            <input id="title" name="title" th:value="${study?.title}" placeholder="스터디 제목을 입력하세요." required>
             <label for="description">스터디 소개</label>
-            <textarea id="description" name="description" rows="5" placeholder="스터디에 대한 간단한 소개를 입력하세요." required></textarea>
+            <textarea id="description" name="description" rows="5" th:text="${study?.description}" placeholder="스터디에 대한 간단한 소개를 입력하세요." required></textarea>
             <label for="capacity">모집 정원</label>
-            <input id="capacity" name="capacity" type="number" min="1" required>
+            <input id="capacity" name="capacity" type="number" min="1" th:value="${study?.capacity}" required>
         </div>
         <div class="actions">
-            <a class="button" th:href="@{/studies}">취소</a>
+            <a class="button" th:href="${editing} ? @{/studies/{studyId}(studyId=${study.studyId})} : @{/studies}">취소</a>
             <button class="primary" type="submit" th:text="${editing ? '수정하기' : '등록하기'}">등록하기</button>
         </div>
     </form>
