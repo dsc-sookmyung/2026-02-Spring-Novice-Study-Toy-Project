@@ -22,16 +22,14 @@ public class StudyApiController{
     private final StudyService studyservice;
 
     @PostMapping("/api/studies")
-    public ResponseEntity<Study> addStudy(@RequestBody AddStudyRequest request, @AuthenticationPrincipal OidcUser account){
+    public ResponseEntity<StudyResponse> addStudy(
+            @RequestBody AddStudyRequest request,
+            @AuthenticationPrincipal OidcUser account) {
 
         Study savedStudy = studyservice.save(request, account);
 
-        //HTTP 응답
-        //상태코드(Status), 헤더(Headers), 본문(Body)
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(savedStudy);
-
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new StudyResponse(savedStudy));
     }
 
     // 전체 스터디 목록 조회 API

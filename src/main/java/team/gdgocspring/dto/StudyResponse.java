@@ -14,7 +14,7 @@ public class StudyResponse {
     private String content;
     private int capacity;
     private String recruitment_status;
-    private User leader;
+    private String leaderId;
 
     public StudyResponse(Study study) {
         this.studyid = study.getId();
@@ -22,6 +22,6 @@ public class StudyResponse {
         this.content = study.getContent();
         this.capacity = study.getCapacity();
         this.recruitment_status = study.getRecruitmentStatus();
-        this.leader = study.getLeader();
+        this.leaderId = study.getLeader().getGoogleSubject();
     }
 }

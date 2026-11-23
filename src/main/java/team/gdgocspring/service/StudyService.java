@@ -26,9 +26,17 @@ public class StudyService {
     @Transactional
     public Study save(AddStudyRequest request, OidcUser account) {
 
-        String leaderID = account.getSubject();
+        String leaderId = account.getSubject();
 
-        User leader = userRepository.findById(leaderID).orElseThrow(()-> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        User leader = userRepository.findById(leaderId)
+                .orElseGet(() -> {
+                    User newUser = new User(leaderId);
+                    newUser.updateProfile(
+                            account.getEmail(),
+                            account.getFullName()
+                    );
+                    return userRepository.save(newUser);
+                });
 
         Study study = request.toEntity(leader);
 
