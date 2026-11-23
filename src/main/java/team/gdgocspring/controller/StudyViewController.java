@@ -36,9 +36,12 @@ public class StudyViewController {
     }
 
     @GetMapping("/studies/{id}")
-    public String detail(@PathVariable Integer id, Model model) {
+    public String detail(@PathVariable Integer id, @AuthenticationPrincipal OidcUser account, Model model) {
         Study study = studyService.getStudy(id);
+        boolean isOwner = account != null && study.getOwner().getGoogleSubject().equals(account.getSubject());
+
         model.addAttribute("study", study);
+        model.addAttribute("isOwner", isOwner);//스터디장에게만 수정 삭제 버튼 보임
         return "studyDetail";
     }
 
@@ -48,11 +51,42 @@ public class StudyViewController {
         return "studyForm";
     }
 
-    @GetMapping("/studies/1/edit")
-    public String edit(Model model) {
+    @GetMapping("/studies/{id}/edit")
+    public String edit(@PathVariable Integer id,
+                       @AuthenticationPrincipal OidcUser account,
+                       Model model) {
+        Study study = studyService.getStudy(id);
+        User currentUser = userService.getUser(account.getSubject());
+
+        // URL 직접 입력으로 남의 수정 페이지에 들어오는 것 차단
+        if (!study.getOwner().getGoogleSubject().equals(currentUser.getGoogleSubject())) {
+            throw new IllegalArgumentException("스터디장만 수정할 수 있습니다.");
+        }
+
         model.addAttribute("editing", true);
+        model.addAttribute("study", study);
         return "studyForm";
     }
+    //수정 처리 메서드
+    @PostMapping("/studies/{id}/edit")
+    public String updateStudy(@PathVariable Integer id,
+                              @RequestParam String title,
+                              @RequestParam String description,
+                              @RequestParam int capacity,
+                              @AuthenticationPrincipal OidcUser account) {
+        User currentUser = userService.getUser(account.getSubject());
+        studyService.updateStudy(id, title, description, capacity, currentUser);
+        return "redirect:/studies/" + id;
+    }
+    //삭제 처리 메서드
+    @PostMapping("/studies/{id}/delete")
+    public String deleteStudy(@PathVariable Integer id,
+                              @AuthenticationPrincipal OidcUser account) {
+        User currentUser = userService.getUser(account.getSubject());
+        studyService.deleteStudy(id, currentUser);
+        return "redirect:/studies";
+    }
+
 
     @GetMapping("/studies/1/applicants")
     public String applicants() {

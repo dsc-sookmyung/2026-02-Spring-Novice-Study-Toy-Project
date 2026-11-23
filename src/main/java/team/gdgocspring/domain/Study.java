@@ -57,4 +57,13 @@ public class Study {
         this.capacity = capacity;
         this.owner = owner;
     }
+
+    public void update(String title, String description, int capacity, int currentParticipantCount) {
+        if (capacity < currentParticipantCount) {
+            throw new IllegalArgumentException("모집 정원은 현재 참여 인원(" + currentParticipantCount + "명)보다 적게 설정할 수 없습니다.");
+        }
+        this.title = title;
+        this.description = description;
+        this.capacity = capacity;
+    }
 }

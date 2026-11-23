@@ -30,9 +30,13 @@
             </button>
         </aside>
     </div>
-    <div class="actions">
-        <a class="button" th:href="@{/studies/1/edit}">수정</a>
-        <a class="button" th:href="@{/studies/1/applicants}">신청자 관리</a>
+    <div class="actions" th:if="${isOwner}">
+        <a class="button" th:href="@{/studies/{studyId}/edit(studyId=${study.studyId})}">수정</a>
+        <a class="button" th:href="@{/studies/{studyId}/applicants(studyId=${study.studyId})}">신청자 관리</a>
+        <form th:action="@{/studies/{studyId}/delete(studyId=${study.studyId})}" method="post" style="display:inline;"
+              onsubmit="return confirm('정말 이 스터디를 삭제하시겠습니까?');">
+            <button type="submit" class="button">삭제</button>
+        </form>
     </div>
 </main>
 <dialog id="apply-dialog" aria-labelledby="apply-title">
